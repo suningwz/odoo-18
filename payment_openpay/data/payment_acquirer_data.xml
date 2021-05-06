@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    
+    <record id="payment_acquirer_openpay" model="payment.acquirer">
+        <field name="name">Openpay</field>
+        <field name="display_as">Credit Card (powered by Openpay)</field>
+        <field name="provider">openpay</field>
+        <field name="image_128" type="base64" file="payment_openpay/static/src/img/openpay.png"/>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="view_template_id" ref="openpay_form"/>
+        <field name="registration_view_template_id" ref="openpay_s2s_form"/>
+        <field name="payment_flow">s2s</field>
+        <field name="pre_msg"><![CDATA[
+<p>You will be prompt with openpay Payment page for payment information.</p>]]></field>
+        <field name="description" type="html">
+            <p>
+                A payment gateway to accept online payments via credit cards.
+            </p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><i class="fa fa-check"/>Online Payment</li>
+                <li class="list-inline-item"><i class="fa fa-check"/>Save Cards</li>
+            </ul>
+        </field>
+        <field name="payment_icon_ids" eval='[(6, 0, [ref("payment.payment_icon_cc_mastercard"),
+                                                      ref("payment.payment_icon_cc_american_express"),
+                                                      ref("payment.payment_icon_cc_visa")])]'/>
+    </record>
+    
+    <record id="payment_acquirer_paynet" model="payment.acquirer">
+        <field name="name">Paynet</field>
+        <field name="display_as">Paynet</field>
+        <field name="provider">paynet</field>
+        <field name="image_128" type="base64" file="payment_openpay/static/src/img/paynet_logo.png"/>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="view_template_id" ref="paynet_form"/>
+        <field name="pre_msg"><![CDATA[
+<p>You will be prompt with Paynet payment page for payment information.</p>]]></field>
+    </record>
+    
+    
+</odoo>
