@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="action_report_payment_transaction"
+            string="Paynet Payment receipt"
+            model="payment.transaction" 
+            report_type="qweb-pdf"
+            file="payment_openpay.report_payment_transaction"
+            name="payment_openpay.report_payment_transaction"
+            print_report_name="(object.openpay_reference and '%s' % (object.openpay_reference)) or '%s' % (object.reference)"
+        />
+    </data>
+</odoo>
