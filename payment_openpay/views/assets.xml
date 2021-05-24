@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+	<template id="assets_frontend_openpay" inherit_id="web.assets_frontend">
+        <xpath expr="link[last()]" position="after">
+            <link rel="stylesheet" type="text/scss" href="/payment_openpay/static/src/css/openpay.css"/>
+            <link rel="stylesheet" type="text/scss" href="/payment_openpay/static/src/css/pago.css"/>
+        </xpath>
+		<xpath expr="script[@src='/payment/static/src/js/payment_form.js']" position="before">
+        	<script type="text/javascript" src="/payment_openpay/static/src/js/openpay.v1.min.js"/>
+            <script type='text/javascript' src="/payment_openpay/static/src/js/openpay-data.v1.min.js"/>
+			<script src="https://conektaapi.s3.amazonaws.com/v0.3.2/js/conekta.js" type="text/javascript"/>
+        </xpath>
+		
+		<xpath expr="script[last()]" position="after">
+        	<script type="text/javascript" src="/payment_openpay/static/src/js/payment_form.js" />
+        	<script type="text/javascript" src="/payment_openpay/static/src/js/payment_processing.js"/>
+        </xpath>
+    </template>
+
+<!--    <template id="report_assets_common_conekta" inherit_id="web.report_assets_common">-->
+<!--        <xpath expr="link[last()]" position="after">-->
+<!--        	<link rel="stylesheet" type="text/scss" href="/payment_conekta_oxoo/static/src/scss/style.scss"/>-->
+<!--        </xpath>-->
+<!--    </template>-->
+    
+</odoo>
