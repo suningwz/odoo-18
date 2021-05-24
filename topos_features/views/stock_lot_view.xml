@@ -1,0 +1,28 @@
+<odoo>
+	<record id="view_production_lot_form_inherit" model="ir.ui.view">
+        <field name="name">stock.production.lot.form.inherit</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <field name="ref" position="attributes" >
+				<attribute name="string">Reference/MSISDN</attribute>
+				<attribute name="attrs">{'required': [('plan_type', '=', 'sim')]}</attribute>
+            </field>
+            <field name="ref" position="after" >
+	            <field name="plan_type" invisible="0"/>
+            </field>
+	
+	        <group name="main_group" position="inside" >
+	            <group attrs="{'invisible': [('plan_type', '!=', 'sim')]}">
+		            <field name="imsi_home" attrs="{'required': [('plan_type', '=', 'sim')]}"/>
+		            <field name="imsi_roaming_broaker_1" attrs="{'required': [('plan_type', '=', 'sim')]}"/>
+		            <field name="imsi_roaming_broaker_2" attrs="{'required': [('plan_type', '=', 'sim')]}"/>
+		            <field name="main_batch" attrs="{'required': [('plan_type', '=', 'sim')]}"/>
+		            <field name="batch_a" attrs="{'required': [('plan_type', '=', 'sim')]}"/>
+		            <field name="batch_b" attrs="{'required': [('plan_type', '=', 'sim')]}"/>
+	            </group>
+            </group>
+        </field>
+    </record>
+    
+</odoo>

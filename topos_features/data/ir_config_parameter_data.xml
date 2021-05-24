@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+
+    <record id="altan_api_key" model="ir.config_parameter">
+        <field name="key">altan.api.key</field>
+        <field name="value">BE 152</field>
+    </record>
+
+    <record id="demo_api_key" model="ir.config_parameter">
+        <field name="key">topos.demo.api</field>
+        <field name="value">http://10.1.10.7:8080/camel_demo/api/</field>
+    </record>
+
+    <record id="abd_rida_key" model="ir.config_parameter">
+        <field name="key">abd.rida</field>
+        <field name="value">040</field>
+    </record>
+
+    <record id="abd_rcr_key" model="ir.config_parameter">
+        <field name="key">abd.rcr</field>
+        <field name="value">175</field>
+    </record>
+
+    <record id="altan_url" model="ir.config_parameter">
+        <field name="key">altan.api.url</field>
+        <field name="value">http://10.1.10.7:8080/camel_demo/api/</field>
+    </record>
+
+    <record id="coordinates_url" model="ir.config_parameter">
+        <field name="key">coordinates.url</field>
+        <field name="value">https://10.1.10.16:7342/turboApi/getCoordinates</field>
+    </record>
+
+    <record id="geo_user" model="ir.config_parameter">
+        <field name="key">geo.user</field>
+        <field name="value">odoo_user01</field>
+    </record>
+
+    <record id="geo_password" model="ir.config_parameter">
+        <field name="key">geo.password</field>
+        <field name="value">0D00$$01@2020!</field>
+    </record>
+
+</odoo>

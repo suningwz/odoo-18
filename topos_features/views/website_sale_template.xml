@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="payment_card" inherit_id="website_sale.payment">
+		<xpath expr="//div[@id='shipping_and_billing']" position="inside">
+			<div>
+				<b>Teléfono: </b><span t-esc='order.partner_id.phone' t-options="dict(widget='phone', fields=['phone'], no_marker=True, separator=', ')" class="address-inline"/></div>
+		</xpath>
+	</template>
+	
+	<template id="address_kanban_card" inherit_id="website_sale.address_kanban">
+		<xpath expr="//div[hasclass('card-body')]" position="replace">
+			<div class='card-body' style='min-height: 130px;'>
+                <a t-if="not actual_partner or (ship.id in actual_partner.child_ids.ids)" href="#" class="btn btn-link float-right p-0 js_edit_address no-decoration" role="button" title="Edit this address" aria-label="Edit this address"><i class='fa fa-edit'/></a>
+                <t t-esc="contact" t-options="dict(widget='contact', fields=['name', 'address', 'phone'], no_marker=True)"/>
+            </div>
+		</xpath>
+	</template>
+	
+</odoo>

@@ -1,0 +1,233 @@
+<odoo>
+	<menuitem
+		id="telephony_app_menu"
+		name="Telephony"
+		web_icon="topos_features,static/description/icon.png"
+		groups="topos_features.telephony_group_user,topos_features.telephony_group_manager"
+		sequence="75"/>
+	
+    <record id="msisdn_operation_tree_view" model="ir.ui.view">
+        <field name="name">msisdn.operation.tree</field>
+        <field name="model">msisdn.operation</field>
+        <field name="arch" type="xml">
+            <tree>
+	            <field name="name"/>
+	            <field name="partner_id"/>
+	            <field name="operation_type"/>
+	            <field name="altan_order_id"/>
+	            <field name="user_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+	
+	<record id="msisdn_operation_form_view" model="ir.ui.view">
+        <field name="name">msisdn.operation.form</field>
+        <field name="model">msisdn.operation</field>
+	    <field name="arch" type="xml">
+	        <form string="Operations">
+		        <header>
+			        <field name="api_executed" invisible="1"/>
+			        <field name="is_msisdn_operation" invisible="1"/>
+			        <button name="button_confirm" type="object" string="Confirm" states="draft" class="oe_highlight"/>
+			        <button name="button_set_to_draft" type="object" string="Convert to draft" states="confirm,cancel" class="danger"/>
+			        <button string="Execute" type="object" name="execute_api_method" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm'),'|', ('api_executed', '!=', True)]}"/>
+			        <button string="Check order status" type="object" name="check_order_status"  class="oe_highlight" attrs="{'invisible': [('state', '!=', 'done'), ('is_msisdn_operation', '=', False)]}"/>
+			        <button string="Cancel order" type="object" name="cancel_order" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'done'), ('is_msisdn_operation', '=', False)]}"/>
+		            <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done,cancel"/>,
+		        </header>
+	            <sheet>
+		            <div class="oe_title">
+						<label for="name"/>
+						<h1>
+							<field name="name"/>
+						</h1>
+		            </div>
+		            <group>
+			            <group>
+				            <field name="partner_id"/>
+			            </group>
+		            </group>
+		            <group>
+			            <group>
+				            <field name="operation_type"/>
+		                </group>
+		                <group>
+			                <field name="portability_operation" attrs="{'invisible': [('operation_type', '!=', 'portability')]}"/>
+			                <field name="imei_operation" attrs="{'invisible': [('operation_type', '!=', 'imei')]}"/>
+				            <field name="msisdn_operation" attrs="{'invisible': [('operation_type', '!=', 'msisdn')]}"/>
+	                    </group>
+	                </group>
+		            <group>
+		                <group>
+				            <field name="sim_card_ids"
+				                   widget="many2many_tags"
+				                   options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True, 'no_create': True}"
+				                   attrs="{'invisible': [('operation_type', '!=', 'msisdn')]}"/>
+			                <field name="reason" attrs="{'required': [('msisdn_operation', '=', 'resume')], 'invisible': [('msisdn_operation', '!=', 'resume')]}"/>
+				            <field name="suspend_reason" attrs="{'required': [('msisdn_operation', '=', 'suspend')], 'invisible': [('msisdn_operation', '!=', 'suspend')]}"/>
+		                    <field name="schedule_date" attrs="{'invisible': [('msisdn_operation', 'in', ['profile', 'barring', 'unbarring']),'&amp;',('operation_type', '=', 'portability')]}"/>
+			                <field name="network_type" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+			                <field name="msisdn_ported" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+			                <field name="operator_id" options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True, 'no_create': True}" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+			                <field name="nip_code" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+		                </group>
+		                <group>
+			                <field name="msisdn_transitory" options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True, 'no_create': True}" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+			                <field name="imsi" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+			                <field name="last_data_plan" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+			                <field name="approved_date" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+			                <field name="contact_number" attrs="{'required': [('operation_type', '=', 'portability')], 'invisible': [('operation_type', '!=', 'portability')]}"/>
+		                </group>
+	                </group>
+		            <notebook>
+		                <page string="Response" name="comments">
+		                    <group>
+		                        <field name="response" nolabel="1" widget="html"/>
+		                    </group>
+		                </page>
+		                <page string="Other information" name="info">
+		                    <group>
+				                <group>
+					                <field name="user_id"/>
+					                <field name="company_id"/>
+					                <field name="altan_order_id"/>
+				                </group>
+			                </group>
+		                </page>
+		            </notebook>
+	            </sheet>
+		        <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+	        </form>
+	    </field>
+	</record>
+	
+	<record id="view_msisdn_operation_search" model="ir.ui.view">
+        <field name="name">msisdn.operation.search</field>
+        <field name="model">msisdn.operation</field>
+        <field name="arch" type="xml">
+            <search string="MSISDN Operation">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self),('partner_id', 'ilike', self)]" string="Reference"/>
+                <field name="partner_id"/>
+                <field name="sim_card_ids" filter_domain="[('sim_card_ids', 'ilike', self)]" string="MSISDN"/>
+	            <separator/>
+	            <field name="state" filter_domain="[('state', '=', 'draft')]" string="Draft"/>
+	            <field name="state" filter_domain="[('state', '=', 'confirm')]" string="Confirmed"/>
+	            <field name="state" filter_domain="[('state', '=', 'done')]" string="Done"/>
+	            <field name="state" filter_domain="[('state', '=', 'cancel')]" string="Cancelled"/>
+	            <separator/>
+	            <field name="operation_type" filter_domain="[('operation_type', '=', 'msisdn')]" string="MSISDN"/>
+	            <field name="operation_type" filter_domain="[('operation_type', '=', 'portability')]" string="Portability"/>
+	            <field name="operation_type" filter_domain="[('operation_type', '=', 'imei')]" string="IMEI"/>
+	            <separator/>
+	            <group expand="0" string="Group By...">
+		            <filter string="Partner" name="partner_id" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Operation type" name="state" domain="[]" context="{'group_by': 'operation_type'}"/>
+                    <filter string="State" name="state" domain="[]" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+	
+	<record id="msisdn_operation_action" model="ir.actions.act_window">
+        <field name="name">Operations</field>
+        <field name="res_model">msisdn.operation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_msisdn_operation_search"/>
+	    <field name="view_id" ref="msisdn_operation_tree_view"/>
+		<field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+              Click to add a new operation.
+          </p>
+        </field>
+    </record>
+	
+	<menuitem id="msisdn_operation_main_menu"
+		name="Operations"
+		action="msisdn_operation_action"
+        parent="telephony_app_menu"
+        groups="telephony_group_user,telephony_group_manager"
+        sequence="1"/>
+	
+	<record id="mobile_network_operator_form_view" model="ir.ui.view">
+        <field name="name">mobile.network.operator.form</field>
+        <field name="model">mobile.network.operator</field>
+        <field name="arch" type="xml">
+            <form string="Mobile Network Operators">
+                <sheet>
+	                <div class="oe_title">
+						<label for="name"/>
+						<h1>
+							<field name="name"/>
+						</h1>
+		            </div>
+                    <group>
+	                    <group>
+		                    <field name="parent_id"/>
+		                    <field name="type"/>
+		                    <field name="dcr_code"/>
+		                    <field name="dida_code"/>
+		                    <field name="company_id" groups="base.group_multi_company"/>
+	                    </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mobile_network_operator_tree_view" model="ir.ui.view">
+        <field name="name">mobile.network.operator.tree</field>
+        <field name="model">mobile.network.operator</field>
+        <field name="arch" type="xml">
+            <tree string="Mobile Network Operators">
+                <field name="complete_name"/>
+                <field name="type"/>
+                <field name="dcr_code"/>
+                <field name="dida_code"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+	
+	<record id="view_mobile_network_operator_search" model="ir.ui.view">
+        <field name="name">mobile.network.operator.search</field>
+        <field name="model">mobile.network.operator</field>
+        <field name="arch" type="xml">
+            <search string="Mobile Network Operators">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('dcr_code', 'ilike', self)]" string="Mobile Network Operator"/>
+                <separator/>
+                <group expand="0" string="Group By...">
+                    <filter string="MNO" name="parent_id" domain="[]" context="{'group_by': 'parent_id'}"/>
+                    <filter string="Type" name="type" domain="[]" context="{'group_by': 'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="mobile_network_operator_action" model="ir.actions.act_window">
+        <field name="name">Mobile Network Operators</field>
+        <field name="res_model">mobile.network.operator</field>
+        <field name="view_mode">list,form</field>
+	    <field name="search_view_id" ref="view_mobile_network_operator_search"/>
+	    <field name="view_id" ref="mobile_network_operator_tree_view"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+              Click to add a new mobile network operator.
+          </p>
+          <p>
+              This allows to classify your mobile network operators.
+          </p>
+        </field>
+    </record>
+	
+	<menuitem id="mobile_network_operator_menu"
+		name="MNOs"
+		action="mobile_network_operator_action"
+	    parent="topos_features.telephony_app_menu"
+	    groups="topos_features.telephony_group_manager"
+	    sequence="2"/>
+</odoo>

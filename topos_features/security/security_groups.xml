@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record model="ir.module.category" id="module_category_topos_features">
+		<field name="name">Telephony</field>
+		<field name="description">Telephony module</field>
+		<field name="sequence">75</field>
+	</record>
+	
+	<record id="telephony_group_user" model="res.groups">
+		<field name="name">User</field>
+		<field name="category_id" ref="module_category_topos_features"/>
+		<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+	</record>
+	
+	<record id="telephony_group_manager" model="res.groups">
+		<field name="name">Manager</field>
+		<field name="category_id" ref="module_category_topos_features"/>
+		<field name="implied_ids" eval="[(4, ref('topos_features.telephony_group_user'))]"/>
+	</record>
+</odoo>
