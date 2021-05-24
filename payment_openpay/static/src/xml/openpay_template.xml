@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="openpay_template_modal" name="openpayModal">
+        <div id="openpay_payment_modal" class="modal fade oe_website_openpay" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content" id="payment_type">
+                    <div class="modal-header">
+                        <h4 style="vertical-align: middle;">Por favor indique el método de pago de su preferencia</h4>
+                        <button type="button" class="close" data-dismiss="modal">&amp;times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-6">
+                                        <select class="custom-select select_payment_method" id="openpay_method" name="openpay_method_type">
+                                            <option value="">Seleccione un método de pago</option>
+                                            <option value="store">Efectivo (Paynet)</option>
+                                            <option value="card">Tarjeta Crédito/Débito</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-content" id="payment-paynet">
+                    <div class="modal-header">
+                        <h4 style="vertical-align: middle;">Pago con </h4>
+                        <div class="display-td">
+                            <img class="img-responsive pull-right" src="/payment_openpay/static/src/img/paynet_logo.png"/>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal">&amp;times;</button>
+                    </div>
+                    <div class="modal-body openpay-checkout-div">
+                        <div class="logos-tiendas">
+                            <h5 style="vertical-align: middle;"> Estas son las tiendas disponibles para realizar su pago </h5>
+                            <ul>
+                                <li><img src="/payment_openpay/static/src/img/01.png" width="100" height="50"/></li>
+                                <li><img src="/payment_openpay/static/src/img/02.png" width="100" height="50"/></li>
+                                <li><img src="/payment_openpay/static/src/img/03.png" width="100" height="50"/></li>
+                                <li><img src="/payment_openpay/static/src/img/04.png" width="100" height="50"/></li>
+                                <li><img src="/payment_openpay/static/src/img/05.png" width="100" height="50"/></li>
+                                <li><img src="/payment_openpay/static/src/img/06.png" width="100" height="50"/></li>
+                                <li><img src="/payment_openpay/static/src/img/07.png" width="100" height="50"/></li>
+                                <li><img src="/payment_openpay/static/src/img/08.png" width="100" height="50"/></li>
+                            </ul>
+                        </div>
+                        <form id="openpay-checkout-cash" method="post" target="_self" action="/payment/openpay">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <t t-if="return_url">
+                                <input type='hidden' name='return_url' t-att-value='return_url'/>
+                            </t>
+                            <div id="payment_data">
+                                <input type='hidden' name='reference' t-att-value='reference'/>
+                                <input type='hidden' name='amount' t-att-value='amount or "0.0"'/>
+                                <input type='hidden' name='currency' t-att-value='currency.name'/>
+                            </div>
+                            <input type="hidden" name='payment_method' id="payment_method" value="store"/>
+                            <input type="hidden" name='openpay-acquirer-id' id="openpay-acquirer-id" t-att-value="'%s' %website.get_openpay_payment_acquirere_id()"/>
+                            <input type='hidden' name='device-session-id' id="device-session-id"/>
+                            
+                            <div class="panel panel-default credit-card-box">
+                                <div class="panel-body">
+                                    <div class="col-sm-12">
+                                        <div>
+                                            <button class="btn btn-success btn-lg btn-block" type="submit">Pagar <t t-esc='amount or "0.0"'/></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+                <div class="modal-content" id="payment-card">
+                    <div class="modal-header">
+                        <div class="card-expl">
+                             <div class="credit"><h5>Tarjetas de crédito</h5></div>
+                        </div>
+                        <div class="card-expl">
+                            <div class="debit"><h5>Tarjetas de débito</h5></div>
+                        </div>
+                    </div>
+                    <div class="modal-body openpay-checkout-div">
+                        <form id="openpay-checkout-card" method="post" target="_self" action="/payment/openpay">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" id="partner_id" t-att-value="partner_id"/>
+                            <t t-if="return_url">
+                                <input type='hidden' name='return_url' t-att-value='return_url'/>
+                            </t>
+                            <div id="payment_data">
+                                <input type='hidden' name='reference' t-att-value='reference'/>
+                                <input type='hidden' name='amount' t-att-value='amount or "0.0"'/>
+                                <input type='hidden' name='currency' t-att-value='currency.name'/>
+                            </div>
+                            <input type="hidden" name='payment_method' id="payment_method" value="card"/>
+                            <input type="hidden" name='openpay-acquirer-id' id="openpay-acquirer-id" t-att-value="'%s' %website.get_openpay_payment_acquirere_id()"/>
+                            <input type='hidden' name='device-session-id' id="device-session-id-card"/>
+                            <input type="hidden" name='token_id' id="token_id"/>
+                            
+                            <div class="panel panel-default credit-card-box">
+                                <div class="panel-body">
+                                    <div class="col-sm-12">
+                                        <div class="row" t-if="errors">
+                                            <t t-foreach="errors" t-as="error">
+                                                <div t-attf-class="card bg-danger">
+                                                    <div class="card-header">
+                                                        <span t-esc="error" />
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label for="validationCustomUsername">Nombre del titular</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control holdername" name="holdername" id="validationCustomUsername" placeholder="Titular" aria-describedby="inputGroupPrepend" required="required" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label for="validationCustomUsername">Número de Tarjeta</label>
+                                            <span class="hidden-xs">Por favor introduzca el numero sin espacios y sin guiones.</span>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroupPrepend">
+                                                        <i class="fa fa-credit-card" />
+                                                    </span>
+                                                </div>
+                                                <input type="text" maxlength="16" pattern="\d{15,16}" class="form-control cardnumber" name="cardnumber" id="validationCustomUsername" placeholder="Número de Tarjeta" aria-describedby="inputGroupPrepend" required="required" />
+                                                <div class="invalid-feedback">
+                                                   Por favor verifique su número.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 display-inline">
+                                        <div class="form-group col-md-6">
+                                            <label for="cardExpiry">
+                                                <span class="hidden-xs">FECHA EXPIRACIÓN</span>
+                                                <span class="visible-xs-inline">MES</span> / AÑO</label>
+                                            <input type="text" maxlength="2" pattern="\d{2}" class="col-md-3 isible-xs-inline-block" name="cardExpiryMonth" placeholder="MM" autocomplete="cc-exp" required="required" />
+                                            <input type="text" maxlength="2" pattern="\d{2}"  class="col-md-3 isible-xs-inline-block" name="cardExpiryYear" placeholder="YY" autocomplete="cc-exp" required="required" />
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="cardCVC">Código CVC</label>
+                                            <input type="text" maxlength="4" pattern="\d{3,4}" class="form-control" name="cardCVC" placeholder="CVC" autocomplete="cc-csc" required="required"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div>
+                                            <button class="btn btn-success btn-lg btn-block js_pay" type="submit">Pagar <t t-esc='amount or "0.0"'/></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="openpay row">
+                            <div class="logo">Transacciones realizadas vía:</div>
+                            <div class="shield">Tus pagos se realizan de forma segura con encriptación de 256 bits</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>
