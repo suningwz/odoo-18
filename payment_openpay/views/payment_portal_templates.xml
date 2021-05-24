@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<template id="portal_invoice_page_paynet" inherit_id="account.portal_invoice_page">
+    		<xpath expr="//div[@id='invoice_content']//div[1]" position="attributes">
+                <attribute name="class">o_portal_html_view shadow col-lg-12</attribute>
+	        </xpath>
+    	</template>
+	    
+    	<template id="portal_invoice_page_paynet" inherit_id="sale.sale_order_portal_template">
+    		<xpath expr="//div[@id='quote_content']//div[7]" position="replace">
+                <!-- main content -->
+                <div t-attf-class="card #{'col-lg-12' if report_type == 'html' else ''}">
+                    <div t-call="sale.sale_order_portal_content"/>
+                </div>
+	        </xpath>
+    	</template>
+	    
+    	<template id="payment_confirmation_status_paynet" inherit_id="payment.payment_confirmation_status">
+    		<xpath expr="//div[@role='status']/span[@t-if='payment_tx_id.acquirer_id.pending_msg']" position="after">
+    			<div t-if="payment_tx_id.acquirer_id.provider == 'paynet'">
+	                <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" />
+	                <div class="whitepaper">
+						<div class="Header">
+							<div class="Logo_empresa">
+						        <img t-att-src="image_data_uri(payment_tx_id.acquirer_id.company_id.logo)" alt="Logo"/>
+						    </div>
+						    <div class="Logo_paynet">
+						        <div>Servicio a pagar</div>
+						        <img src="/payment_openpay/static/src/img/paynet_logo.png" alt="Logo Paynet"/>
+						    </div>
+					    </div>
+					    <div class="Data">
+						    <div class="Big_Bullet">
+					            <span/>
+					        </div>
+					        <div class="col1">
+					            <h3>Fecha límite de pago</h3>
+					            <h4>No aplica</h4>
+					            <img width="300" src="https://api.openpay.mx/barcode/0129384756234859?height=30" alt="Código de Barras"/>
+					            <div>
+						            <h2 class="text-center opps-ammount" t-esc="payment_tx_id.openpay_reference"/>
+					            </div>
+						        <p>
+					                <small>En caso de que el escáner no sea capaz de leer el código de barras, escribir la referencia tal como se muestra.</small>
+						        </p>
+					
+					        </div>
+					        <div class="col2">
+					            <h2>Total a pagar</h2>
+					            <h1><span t-esc="payment_tx_id.currency_id.symbol"/><span t-esc="payment_tx_id.amount"/><small t-esc="payment_tx_id.currency_id.name"/></h1>
+					            <span class="note">La comisión por recepción del pago varía de acuerdo a los términos y condiciones que cada cadena comercial establece.</span>
+					        </div>
+					    </div>
+					    <div class="DT-margin"/>
+					    <div class="Data">
+					        <div class="Big_Bullet">
+					            <span/>
+					        </div>
+					        <div>
+					            <h3>Detalles de la compra</h3>
+					        </div>
+						</div>
+					    <div class="Table-Data">
+					        <div class="table-row color1">
+					            <div>Descripción</div>
+					            <span t-esc="payment_tx_id.reference"/>
+					        </div>
+					        <div class="table-row color2">
+							    <div>Fecha y hora</div>
+						        <span t-if="payment_tx_id.date" t-esc="payment_tx_id.date.strftime('%d/%m/%Y %H:%M')"/>
+					        </div>
+					        <div class="table-row color1">
+					            <div>Correo del cliente</div>
+					            <span t-esc="payment_tx_id.partner_id.email"/>
+					        </div>
+					        <div class="table-row color2"  style="display:none">
+					            <div><span> </span></div>
+					            <span><span> </span></span>
+					        </div>
+					        <div class="table-row color1" style="display:none">
+					            <div><span> </span></div>
+					            <span><span> </span></span>
+					        </div>
+					    </div>
+					    <div class="DT-margin"/>
+					    <div>
+					        <div class="Big_Bullet">
+					            <span/>
+					        </div>
+					        <div class="col1">
+					            <h3>Como realizar el pago</h3>
+					            <ol>
+					                <li>Acude a cualquier tienda afiliada</li>
+					                <li>Entrega al cajero el código de barras y menciona que realizarás un pago de servicio Paynet</li>
+					                <li>Realizar el pago en efectivo por <span t-esc="payment_tx_id.currency_id.symbol"/> <span t-esc="payment_tx_id.amount"/> <span t-esc="payment_tx_id.currency_id.name"/> </li>
+					                <li>Conserva el ticket para cualquier aclaración</li>
+					            </ol>
+					            <small>Si tienes dudas comunícate a NOMBRE TIENDA al teléfono TELEFONO TIENDA o al correo CORREO SOPORTE TIENDA</small>
+					        </div>
+					        <div class="col1">
+					            <h3>Instrucciones para el cajero</h3>
+					            <ol>
+					                <li>Ingresar al menú de Pago de Servicios</li>
+					                <li>Seleccionar Paynet</li>
+					                <li>Escanear el código de barras o ingresar el núm. de referencia</li>
+					                <li>Ingresa la cantidad total a pagar</li>
+					                <li>Cobrar al cliente el monto total más la comisión</li>
+					                <li>Confirmar la transacción y entregar el ticket al cliente</li>
+					            </ol>
+					            <small>Para cualquier duda sobre como cobrar, por favor llamar al teléfono +52 (55) 5351 7371 en un horario de 8am a 9pm de lunes a domingo</small>
+					        </div>
+					    </div>
+					
+					    <div class="logos-tiendas">
+						    <ul>
+							    <li><img src="/payment_openpay/static/src/img/01.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/02.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/03.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/04.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/05.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/06.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/07.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/08.png" width="100" height="50"/></li>
+						    </ul>
+						    <div>
+							    ¿Quieres pagar en otras tiendas? visítanos en: www.openpay.mx/tiendas
+						    </div>
+					    </div>
+					    <div class="Powered text-center">
+					        <img src="/payment_openpay/static/src/img/powered_openpay.png" alt="Powered by Openpay" width="150"/>
+							<a  role="button" class="text-center btn btn-warning d-none d-md-inline-block" href="/shop/print/paynet" target="_blank" aria-label="Print" title="Print Paynet"><i class="fa fa-print"/> Imprimir recibo Paynet</a>
+					    </div>
+			        </div>
+	            </div>
+	         
+    		</xpath>
+    	</template>
+	    
+    	<template id="payment_confirmation_status_paynet_website_sale" inherit_id="website_sale.payment_confirmation_status">
+    		<xpath expr="//t[@t-raw='payment_tx_id.acquirer_id.pending_msg']" position="after">
+    			<div class="col-12 col-lg" t-if="payment_tx_id.acquirer_id.provider == 'paynet'">
+	                <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" />
+	                <div class="whitepaper">
+						<div class="Header">
+							<div class="Logo_empresa">
+						        <img t-att-src="image_data_uri(payment_tx_id.acquirer_id.company_id.logo)" alt="Logo"/>
+						    </div>
+						    <div class="Logo_paynet">
+						        <div>Servicio a pagar</div>
+						        <img src="/payment_openpay/static/src/img/paynet_logo.png" alt="Logo Paynet"/>
+						    </div>
+					    </div>
+					    <div class="Data">
+						    <div class="Big_Bullet">
+					            <span/>
+					        </div>
+					        <div class="col1">
+					            <h3>Fecha límite de pago</h3>
+					            <h4>No aplica</h4>
+					            <img width="300" src="https://api.openpay.mx/barcode/0129384756234859?height=30" alt="Código de Barras"/>
+					            <div>
+						            <h2 class="text-center opps-ammount" t-esc="payment_tx_id.openpay_reference"/>
+					            </div>
+						        <p>
+					                <small>En caso de que el escáner no sea capaz de leer el código de barras, escribir la referencia tal como se muestra.</small>
+						        </p>
+					
+					        </div>
+					        <div class="col2">
+					            <h2>Total a pagar</h2>
+					            <h1><span t-esc="payment_tx_id.currency_id.symbol"/><span t-esc="payment_tx_id.amount"/><small t-esc="payment_tx_id.currency_id.name"/></h1>
+					            <span class="note">La comisión por recepción del pago varía de acuerdo a los términos y condiciones que cada cadena comercial establece.</span>
+					        </div>
+					    </div>
+					    <div class="DT-margin"/>
+					    <div class="Data">
+					        <div class="Big_Bullet">
+					            <span/>
+					        </div>
+					        <div>
+					            <h3>Detalles de la compra</h3>
+					        </div>
+						</div>
+					    <div class="Table-Data">
+					        <div class="table-row color1">
+					            <div>Descripción</div>
+					            <span t-esc="payment_tx_id.reference"/>
+					        </div>
+					        <div class="table-row color2">
+							    <div>Fecha y hora</div>
+						        <span t-if="payment_tx_id.date" t-esc="payment_tx_id.date.strftime('%d/%m/%Y %H:%M')"/>
+					        </div>
+					        <div class="table-row color1">
+					            <div>Correo del cliente</div>
+					            <span t-esc="payment_tx_id.partner_id.email"/>
+					        </div>
+					        <div class="table-row color2"  style="display:none">
+					            <div><span> </span></div>
+					            <span><span> </span></span>
+					        </div>
+					        <div class="table-row color1" style="display:none">
+					            <div><span> </span></div>
+					            <span><span> </span></span>
+					        </div>
+					    </div>
+					    <div class="DT-margin"/>
+					    <div>
+					        <div class="Big_Bullet">
+					            <span/>
+					        </div>
+					        <div class="col1">
+					            <h3 class="text-center">Como realizar el pago</h3>
+					            <ol>
+					                <li>Acude a cualquier tienda afiliada</li>
+					                <li>Entrega al cajero el código de barras y menciona que realizarás un pago de servicio Paynet</li>
+					                <li>Realizar el pago en efectivo por <span t-esc="payment_tx_id.currency_id.symbol"/> <span t-esc="payment_tx_id.amount"/> <span t-esc="payment_tx_id.currency_id.name"/> </li>
+					                <li>Conserva el ticket para cualquier aclaración</li>
+					            </ol>
+					            <small>Si tienes dudas comunícate a NOMBRE TIENDA al teléfono TELEFONO TIENDA o al correo CORREO SOPORTE TIENDA</small>
+					        </div>
+					        <div class="col1">
+					            <h3 class="text-center">Instrucciones para el cajero</h3>
+					            <ol>
+					                <li>Ingresar al menú de Pago de Servicios</li>
+					                <li>Seleccionar Paynet</li>
+					                <li>Escanear el código de barras o ingresar el núm. de referencia</li>
+					                <li>Ingresa la cantidad total a pagar</li>
+					                <li>Cobrar al cliente el monto total más la comisión</li>
+					                <li>Confirmar la transacción y entregar el ticket al cliente</li>
+					            </ol>
+					            <small>Para cualquier duda sobre como cobrar, por favor llamar al teléfono +52 (55) 5351 7371 en un horario de 8am a 9pm de lunes a domingo</small>
+					        </div>
+					    </div>
+					
+					    <div class="logos-tiendas">
+						    <ul>
+							    <li><img src="/payment_openpay/static/src/img/01.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/02.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/03.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/04.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/05.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/06.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/07.png" width="100" height="50"/></li>
+							    <li><img src="/payment_openpay/static/src/img/08.png" width="100" height="50"/></li>
+						    </ul>
+						    <div>
+							    ¿Quieres pagar en otras tiendas? visítanos en: www.openpay.mx/tiendas
+						    </div>
+					    </div>
+					    <div class="Powered text-center">
+					        <img src="/payment_openpay/static/src/img/powered_openpay.png" alt="Powered by Openpay" width="150"/>
+							<a  role="button" class="text-center btn btn-warning d-none d-md-inline-block" href="/shop/print/paynet" target="_blank" aria-label="Print" title="Print Paynet"><i class="fa fa-print"/> Imprimir recibo Paynet</a>
+					    </div>
+			        </div>
+	            </div>
+	         
+    		</xpath>
+    	</template>
+    
+    </data>
+</odoo>
