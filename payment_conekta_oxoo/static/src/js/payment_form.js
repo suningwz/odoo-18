@@ -44,7 +44,6 @@ PaymentForm.include({
                     }
                     else {
                     	$checkedRadio.value = data.id; // set the radio value to the new card id
-                        debugger;
                         form.submit();
                         return new Promise(function () {});
                     }
@@ -148,7 +147,7 @@ PaymentForm.include({
                         newForm.innerHTML = result; // put the html sent by the server inside the form
 						
 						var phone = $(newForm).find('input[name="phone"]')
-						if (phone.length > 0  & phone.val().length < 10){
+						if (phone.length > 0  && phone.val().length < 10){
 							self.displayError(
 	                            _t('Server Error'),
 	                            _t("Please enter valid phone number. Length of phone number must be 10 digits. ")

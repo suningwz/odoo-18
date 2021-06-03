@@ -325,11 +325,12 @@ class PaymentTransaction(models.Model):
         
             #params['charges'] = {'type': 'oxxo'}
             # TODO: ADD expires_at
+        email = partner.email or self.partner_email or ''
         partner_name = partner.name or self.partner_name or ''
         details = params['customer_info'] = {}
         details['name'] = partner_name.replace('_',' ')
         details['phone'] = partner.phone or partner.mobile or ''
-        details['email'] = partner.email or self.partner_email or ''
+        details['email'] = ''.join(email.split(',')[:1]).strip()
         
         line_items = params['line_items'] = []
         tax_lines = {}
